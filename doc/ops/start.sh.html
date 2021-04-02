@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>start.sh</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../";
+    var thisFile = "ops/start.sh";
+    var defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container">
+    <div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+    
+      <tr>
+        <td class="docs">
+          <h1>start.sh</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+    
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1"></a>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="sh">
+<span class="hljs-meta">#!/bin/bash
+</span>
+name=<span class="hljs-string">"reactor"</span>
+commit=$(git rev-parse HEAD | head -c 8)
+registry=<span class="hljs-string">"dhruv1035"</span>
+
+<span class="hljs-keyword">if</span> ! grep -qs <span class="hljs-string">"<span class="hljs-variable">$commit</span>"</span> &lt;&lt;&lt;<span class="hljs-string">"<span class="hljs-variable">$(docker image ls | grep "$name")</span>"</span>
+<span class="hljs-keyword">then</span>
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">"Pulling <span class="hljs-variable">$registry</span>/<span class="hljs-variable">$name</span>:<span class="hljs-variable">$commit</span>"</span>
+  docker pull <span class="hljs-string">"<span class="hljs-variable">$registry</span>/<span class="hljs-variable">$name</span>:<span class="hljs-variable">$commit</span>"</span>
+  docker tag <span class="hljs-string">"<span class="hljs-variable">$registry</span>/<span class="hljs-variable">$name</span>:<span class="hljs-variable">$commit</span>"</span> <span class="hljs-string">"<span class="hljs-variable">$name</span>:<span class="hljs-variable">$commit</span>"</span>
+  docker tag <span class="hljs-string">"<span class="hljs-variable">$name</span>:<span class="hljs-variable">$commit</span>"</span> <span class="hljs-string">"<span class="hljs-variable">$name</span>:latest"</span>
+<span class="hljs-keyword">fi</span>
+
+<span class="hljs-keyword">if</span> grep -qs <span class="hljs-string">"<span class="hljs-variable">$name</span>"</span> &lt;&lt;&lt;<span class="hljs-string">"<span class="hljs-variable">$(docker container ls --filter 'status=running' --format '{{.Names}}')</span>"</span>
+<span class="hljs-keyword">then</span>
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">"Stopping container <span class="hljs-variable">$name</span>"</span>
+  docker container stop <span class="hljs-variable">$name</span>
+  docker container rm <span class="hljs-variable">$name</span>
+<span class="hljs-keyword">fi</span>
+
+certs_dir=<span class="hljs-string">"<span class="hljs-variable">$(pwd)</span>/.certs"</span>
+mkdir -p <span class="hljs-string">"<span class="hljs-variable">$certs_dir</span>"</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Running <span class="hljs-variable">$name</span> container in the background"</span>
+docker run \
+  --name=<span class="hljs-string">"<span class="hljs-variable">$name</span>"</span> \
+  --volume=<span class="hljs-string">"<span class="hljs-variable">$certs_dir</span>:/etc/letsencrypt"</span> \
+  --env-file=.env \
+  --publish=<span class="hljs-string">"80:80"</span> \
+  --publish=<span class="hljs-string">"443:443"</span> \
+  <span class="hljs-string">"<span class="hljs-variable">$name</span>:<span class="hljs-variable">$commit</span>"</span> &amp;
+</pre>
+        </td>
+      </tr>
+    
+  </tbody>
+</table>
+
+  </div>
+</body>
+</html>

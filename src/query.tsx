@@ -16,7 +16,7 @@ interface Position {
 async function execute (query: string, variable = {}) {
   const response = await axios.post(uniSubgraphUrl, {
     query,
-    variable,
+    variable, 
     crossdomain: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -31,27 +31,25 @@ export { execute };
   export type { Position };
 function Query (user:string){
 let query = `{
-  liquidityPositionSnapshots (
-    where:{
-      user: "${user}",
-      pair_contains: "0x2fdbadf3c4d5a8666bc06645b8358ab803996e28",
-      liquidityTokenBalance_gt: 0,
-      
-    }
-  ) {
-    pair
-    {
+  users(where: {id:"${user}"})
+{
+  liquidityPositions{
+    
+    pair{
       id
+      token0{
+        id
+        symbol
+      }
+      token1{
+        id
+        symbol
+      }
     }
     liquidityTokenBalance
-      liquidityTokenTotalSupply
-      reserve0
-      reserve1
-      reserveUSD
-      token0PriceUSD
-      token1PriceUSD
-    }
-  }`
+  }
+}  
+}`
 return query
 }
 export default Query

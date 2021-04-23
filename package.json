@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.2",
@@ -25,7 +27,7 @@
     "test": "react-scripts test",
     "build": "npm run build-bundle && npm run build-image",
     "build-bundle": "react-scripts build",
-    "build-image": "docker build --file ops/Dockerfile --tag myappuni .",
+    "build-image": "docker build --file ops/Dockerfile --tag trial .",
     "eject": "react-scripts eject",
     "publish": "bash ops/publish.sh",
     "start": "react-scripts start",

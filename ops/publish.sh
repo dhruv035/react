@@ -1,10 +1,9 @@
 
 name="trial"
-commit="abc"
-registry="${DOCKER_REGISTRY:-$(whoami)}"
+commit="latest"
+registry="dhruv1035"
 
 npm run build
-docker build -t starter .
 echo "Tagging $name:$commit"
 docker tag "$name:latest" "$name:$commit"
 echo "Tagging $registry/$name:$commit"

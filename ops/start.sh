@@ -28,6 +28,5 @@ docker run \
   --name="$name" \
   --volume="$certs_dir:/etc/letsencrypt" \
   --env-file=.env \
-  --publish="80:80" \
-  --publish="443:443" \
-  "$name:$commit" &
+  --p="80:80" \
+  "$name:$commit"
